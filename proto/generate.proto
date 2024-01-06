@@ -156,7 +156,7 @@ message Generation {
     /// Complete generated text
     optional GeneratedText generated_text = 4;
     /// Top tokens
-    repeated Tokens top_tokens = 5;
+    Tokens top_tokens = 5;
 }
 
 message FilterBatchRequest {

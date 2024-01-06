@@ -548,27 +548,30 @@ fn send_responses(
         .zip(tokens_.is_special.into_iter())
         .enumerate()
         .peekable();
-    while let Some((i, (((id, logprob), text), special))) = iterator.next() {
+    while let Some((_i, (((id, logprob), text), special))) = iterator.next() {
         let token = Token {
             id,
             text,
             logprob,
             special,
         };
-        let top_tokens = if let Some(top_tokens_) = generation.top_tokens.get(i) {
-            top_tokens_
-                .ids
-                .iter()
-                .zip(top_tokens_.logprobs.iter())
-                .zip(top_tokens_.texts.iter())
-                .zip(top_tokens_.is_special.iter())
-                .map(|(((&id, &logprob), text), &special)| Token {
+        let top_tokens = if let Some(ref top_tokens_) = generation.top_tokens {
+            std::iter::zip(
+                std::iter::zip(
+                    top_tokens_.ids.iter(),
+                    top_tokens_.texts.iter()),
+                std::iter::zip(
+                    top_tokens_.logprobs.iter(),
+                    top_tokens_.is_special.iter(),
+                ),
+            ).map(|((&id, text), (&logprob, &special))| {
+                Token {
                     id,
                     text: text.to_string(),
                     logprob,
                     special,
-                })
-                .collect()
+                }
+            }).collect()
         } else {
             vec![]
         };
