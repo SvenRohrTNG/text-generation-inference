@@ -264,7 +264,7 @@ def get_model(
                 trust_remote_code=trust_remote_code,
             )
 
-    elif model_type == "llama" or model_type == "baichuan":
+    elif model_type in ["llama", "baichuan", "qwen"]:
         if FLASH_ATTENTION:
             return FlashLlama(
                 model_id,
